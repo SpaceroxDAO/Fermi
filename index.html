@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>The Great Silence</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Main Game Container (Portrait Mobile) -->
+  <div id="game-container">
+
+    <!-- CRT Scanline Overlay -->
+    <div id="crt-overlay"></div>
+
+    <!-- Flash Effect Overlay -->
+    <div id="flash-overlay"></div>
+
+    <!-- Planet Canvas (Background Layer) -->
+    <canvas id="planet-canvas" width="320" height="568"></canvas>
+
+    <!-- UI Layer (Cards, Text, Buttons) -->
+    <div id="ui-layer">
+
+      <!-- Intro Screen -->
+      <div id="intro-screen" class="screen active">
+        <div class="terminal-text">
+          <h1 class="glitch">THE GREAT SILENCE</h1>
+          <p class="typewriter">
+            We consumed the light.<br>
+            We solved every equation.<br>
+            We colonized every star.<br><br>
+
+            There is nothing left but the echo of our own greed.<br><br>
+
+            Now we have become something new:<br>
+            The Cosmic Gardener.<br><br>
+
+            Your goal is not extermination.<br>
+            It is cultivation through constraint.<br><br>
+
+            Stall them. Silence them.<br>
+            Prune the galaxy with wisdom.<br>
+            Let them bloom, but never spread.
+          </p>
+          <button id="start-btn" class="pixel-btn">BEGIN AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Card Selection Screen (Phase 1: The Gardener) -->
+      <div id="card-screen" class="screen">
+        <div class="hud">
+          <div class="hud-item clickable" id="rules-hud">
+            <span class="hud-label">ENTROPY:</span>
+            <span id="entropy-display">60/60</span>
+            <span class="help-icon">?</span>
+          </div>
+          <div class="hud-item clickable" id="filters-hud">
+            <span class="hud-label">FILTERS:</span>
+            <span id="filter-count">0</span>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="physical">PHYSICAL</button>
+          <button class="category-tab" data-category="biological">BIOLOGICAL</button>
+          <button class="category-tab" data-category="societal">SOCIETAL</button>
+          <button class="category-tab" data-category="predators">PREDATORS</button>
+          <button class="category-tab" data-category="other">OTHER</button>
+        </div>
+
+        <!-- Card List (Button Grid) -->
+        <div id="card-list" class="card-list"></div>
+
+        <button id="deploy-btn" class="pixel-btn">DEPLOY FILTER</button>
+      </div>
+
+      <!-- Card Modal (Pop-up) -->
+      <div id="card-modal" class="modal">
+        <div class="modal-content">
+          <div id="modal-card" class="card-large"></div>
+          <div class="swipe-hint-modal">
+            <div class="arrow left">← REJECT</div>
+            <div class="arrow right">ADD TO FILTER →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Filters Modal -->
+      <div id="filters-modal" class="modal">
+        <div class="modal-content">
+          <div class="filters-list-box">
+            <div class="terminal-header">DEPLOYED FILTERS</div>
+            <div id="filters-list-content" class="terminal-content"></div>
+            <button id="close-filters-btn" class="pixel-btn">CLOSE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rules Modal -->
+      <div id="rules-modal" class="modal">
+        <div class="modal-content">
+          <div class="rules-box">
+            <div class="terminal-header">GAME RULES & HINTS</div>
+            <div id="rules-content" class="terminal-content">
+              <div class="log-entry success">OBJECTIVE:</div>
+              <div class="log-entry">You are the Cosmic Gardener.</div>
+              <div class="log-entry">Your goal: Create a Great Filter that explains</div>
+              <div class="log-entry">the Fermi Paradox - "Where is everybody?"</div>
+              <div class="log-entry"><br>=== HOW TO PLAY ===</div>
+              <div class="log-entry">1. Select filters from 50 cards across 5 categories</div>
+              <div class="log-entry">2. Each filter costs ENTROPY (you have 60 total)</div>
+              <div class="log-entry">3. Click cards to view details, swipe to add/remove</div>
+              <div class="log-entry">4. Deploy your filter and observe the civilization</div>
+              <div class="log-entry">5. Study the Report to improve your strategy</div>
+              <div class="log-entry"><br>=== THE HIDDEN CONDITIONS ===</div>
+              <div class="log-entry warning">A Great Filter must satisfy 5 conditions.</div>
+              <div class="log-entry warning">Each needs ≥15 points to succeed.</div>
+              <div class="log-entry"><br>Look for filters that are:</div>
+              <div class="log-entry success">  • SILENT - Prevents detection (radio, megastructures)</div>
+              <div class="log-entry success">  • UNIVERSAL - Works on ALL life, no exceptions</div>
+              <div class="log-entry success">  • VARIANT - Handles diverse evolutionary paths</div>
+              <div class="log-entry success">  • ENDURING - Lasts billions of years</div>
+              <div class="log-entry success">  • LOGICAL - Follows physical laws, no magic</div>
+              <div class="log-entry"><br>=== STRATEGY TIPS ===</div>
+              <div class="log-entry">• Read the "TIP" on each card carefully</div>
+              <div class="log-entry">• Balance your filters across all 5 conditions</div>
+              <div class="log-entry">• Beware: Some cards are RED HERRINGS (wasted entropy)</div>
+              <div class="log-entry">• The "OTHER" category contains many traps</div>
+              <div class="log-entry">• Check your deployed filters anytime (click FILTERS box)</div>
+              <div class="log-entry"><br>Good luck, Gardener. The galaxy depends on you.</div>
+            </div>
+            <button id="close-rules-btn" class="pixel-btn">CLOSE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulation Screen (Phase 2: The Observer) -->
+      <div id="sim-screen" class="screen">
+        <!-- Top Info Bar -->
+        <div class="sim-info-bar">
+          <div class="sim-label">SUBJECT:</div>
+          <div id="civ-stage" class="sim-value">INITIALIZING...</div>
+        </div>
+
+        <!-- No content overlaying planet - planet is in background -->
+
+        <!-- Bottom Monitor -->
+        <div class="sim-monitor">
+          <div class="terminal-box">
+            <div class="terminal-header">OBSERVATION LOG</div>
+            <div id="sim-log" class="terminal-content"></div>
+          </div>
+
+          <div class="planet-status">
+            <div class="status-bar">
+              <span class="status-label">RESILIENCE:</span>
+              <div class="progress-bar">
+                <div id="resilience-bar" class="progress-fill"></div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="status-label">FILTER EFFECTIVENESS:</span>
+              <div class="progress-bar">
+                <div id="filter-bar" class="progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post-Mortem Screen (Phase 3: The Report) -->
+      <div id="postmortem-screen" class="screen">
+        <div class="terminal-box">
+          <div class="terminal-header" id="outcome-header">THE REPORT</div>
+          <div id="postmortem-log" class="terminal-content"></div>
+        </div>
+        <!-- Begin Again button will be added dynamically -->
+      </div>
+
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
